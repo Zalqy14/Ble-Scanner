@@ -9,7 +9,7 @@ async def scan():
     # Print the BLE devices detected
     async with aiohttp.ClientSession() as session:
         for address,(device,adv) in devices.items():
-            print(f"Device: {device}, Advertisement: {adv}")
+            print(f"Device: {device}, manufacturer: {adv.manufacturer_data}")
             # We Scan the Mac address
             vendor = await mac_scan(session,address)
             print(f"Device Name after scan: {vendor}")
