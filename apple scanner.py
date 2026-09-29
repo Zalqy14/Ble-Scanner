@@ -9,6 +9,8 @@ APPLE_DEVICE_TYPES = {
     0x12: "FindMy Network (AirTag/Offline Apple Device)",
 }
 
+seen_devices = set()
+
 def appple_validation_scan(device , adv):
     apple_data = adv.manufacturer_data.get(76)
     if apple_data:
@@ -19,11 +21,18 @@ def appple_validation_scan(device , adv):
 
         print(f"Apple Device Detected: {device_type}")
         print(f"    MAC: {device.address}\n")
+        seen_devices.add(device.address)
+
 async def scan():
     print("Scanning...")
     scanner = BleakScanner(appple_validation_scan)
     async with scanner:
         await asyncio.sleep(10)
+    counter_devices()
+
+def counter_devices():
+    print("-"*30)
+    print("Amount of devices seen:", len(seen_devices))
 
 if __name__ == "__main__":
     asyncio.run(scan())
